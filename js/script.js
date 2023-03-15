@@ -58,4 +58,56 @@ btnBuscarFilme.onclick = () => {
         return false;
 }
 
+btnBuscarFilme.onclick = async () => {
+    if (inputBuscarFilme.value.length > 0){
+        let filmes = new Array();
+            fetch("https://www.omdbapi.com/?apikey=448e074e&s="+inputBuscarFilme.value)
+            .then((resp) => resp.json())
+            .then((resp) => {
+                resp.Search.forEach((item) => {
+                    console.log(item);
+                    let filme = new Filme(
+                        item.imdbID,
+                        item.Tilte,
+                        item.Year,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    );
+                    filmes.push(filmes);
+                });
+            });
+    }
+    return false;
+}
+
+let listarFilmes = async (filmes) => {
+    let listaFilmes = await document.querySelector("#lista-filmes");
+    listaFilmes.innerHTML = "";
+    console.log(listaFilmes);
+    if(filmes.length > 0){
+        filmes.forEach(async(filme) =>{
+            console.log(filme);
+            listaFilmes.appendChild(await filme.getCard());
+            filme.getBtnDetalhes().onclick=()=>{
+                detalhesFilmes(filme.id);
+            }
+        });
+    }
+}
+
+let detalhesFilmes = async (id) => {
+    fetch("https://www.omdbapi.com/?apikey=448e074e&i="+id)
+    .then((resp)=> resp.json())
+    .then((resp)=> {
+        //Instanciar objeto da classe filme 
+        //Chamar metodo para gerar card com detalhes do filme
+        //Ocultar div #lista-filmes
+    });
+    console.log(resp);
+}
+
+
 
